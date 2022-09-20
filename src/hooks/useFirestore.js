@@ -23,7 +23,7 @@ const storeReducer = (state, action) => {
         case 'addDoc':
             return {isPending: false, document:action.payload, success: true, error: null }
         case 'error':
-            return {isPending: false, document:action.payload, success: true, error: null }
+            return {isPending: false, document:action.payload, success: false, error: null }
         default:
             return state
     }
@@ -47,6 +47,7 @@ export const useFirestore = (transaction) => {
 
     try{
         const docRef = await addDoc(colRef, doc);
+        console.log(docRef);
         dispatch({ type: "addDoc", payload: docRef });
     } catch (error) {
         dispatch({ type: "error", payload: error.message });
