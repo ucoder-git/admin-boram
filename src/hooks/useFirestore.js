@@ -1,6 +1,6 @@
 import { collection, addDoc } from "firebase/firestore"
 import { useReducer } from "react"
-import { appFireStore } from "../firebase/config"
+import { appFireStore, timestamp } from "../firebase/config"
 
 // 우리가 받을 응답을 저장할 객체입니다. 객체이기 때문에 리듀서로 관리하겠습니다. 
 // 그리고 이전까지는 상태를 관리할 때 error나 isPending을 위한 useState을 따로 작성해왔지만 이번에는 useReducer로 한번에 관리해보겠습니다.
@@ -46,7 +46,8 @@ export const useFirestore = (transaction) => {
         dispatch({ type: "isPending" });
 
     try{
-        const docRef = await addDoc(colRef, doc);
+        const createTime = timestamp.fromDate(new Date());
+        const docRef = await addDoc(colRef, { ...doc, createTime });
         console.log(docRef);
         dispatch({ type: "addDoc", payload: docRef });
     } catch (error) {
